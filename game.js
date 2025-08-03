@@ -45,23 +45,48 @@ const gameController = (function(){
         return gameBoard.isFull() ? {winner:"tie"} : null;
     }
 
-    function makeControlledMove(index){
-        gameBoard.makeMove(index);
-        const result = checkWinner()
-        if(result){
-            gameOn = false;
-            if (result.winner === 'tie'){
-                console.log("tie")
+    function handleCellClick(e){
+        if(!gameOn || !e.target.classList.contains("cell")) return;
+
+        const index = parseInt(e.target.dataset.index);
+        const player = gameBoard.getCurrentPlayer()
+
+        if(gameBoard.makeMove(index)){
+            displayController.updateCell(index, player);
+            const result = checkWinner();
+
+            if(result){
+                gameOn = false;
+                if (result.winner === 'tie'){
+                    displayController.showTie();
+                }
+                else{
+                    displayController.showWinner(result.winner, result.pattern);
+                }
             }
             else{
-                console.log(result.winner, result.pattern)
+                displayController.showCurrentPlayer(gameBoard.getCurrentPlayer());
             }
         }
-        else{
-            console.log(gameBoard.getCurrentPlayer)
-        }
     }
-    return {checkWinner, makeControlledMove};
+    return {
+        startGame() {
+            gameBoard.reset();
+            displayController.reset();
+            displayController.initializeDisplay();
+            gameOn = true;
+
+            document.getElementById("gameboard").addEventListener("click", handleCellClick);
+            displayController.showCurrentPlayer(gameBoard.getCurrentPlayer());
+        },
+
+        newGame() {
+            gameOn = true;
+            gameBoard.reset();
+            displayController.reset();
+            displayController.showCurrentPlayer(gameBoard.getCurrentPlayer());
+        }
+    };
 })();
 
 const displayController = (function(){
@@ -138,3 +163,9 @@ const displayController = (function(){
         }
     }
 })();
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    gameController.startGame();
+    document.getElementById("new-game").addEventListener("click", ()=>{gameController.newGame();});
+    document.getElementById("reset-scores").addEventListener("click", ()=>{displayController.resetScores();});
+})
