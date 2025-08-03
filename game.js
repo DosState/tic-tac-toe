@@ -1,3 +1,26 @@
+const playerSettings = (function(){
+    let players = {
+        X: {name: "Player X", symbol: "X"},
+        O: {name: "player O", symbol: "O"}
+    };
+
+    return{
+        getPlayer: (playerKey)=>({...players[playerKey]}),
+        updatePlayer: (playerKey, name, symbol)=>{
+            if(symbol && symbol.trim()){
+                players[playerKey].symbol = symbol.trim().charAt(0);
+            }
+            if(name && name.trim()){
+                players[playerKey].name = name.trim();
+            }
+            else{
+                players[playerKey].name = `Player ${players[playerKey].symbol}`;
+            }
+        },
+        getAllPlayers: ()=>({...players})
+    }
+})();
+
 const gameBoard = (function() {
     const board = Array(9).fill(null);
     let currentPlayer = 'X';
@@ -49,10 +72,10 @@ const gameController = (function(){
         if(!gameOn || !e.target.classList.contains("cell")) return;
 
         const index = parseInt(e.target.dataset.index);
-        const player = gameBoard.getCurrentPlayer()
+        const currentPlayerKey = gameBoard.getCurrentPlayer()
 
         if(gameBoard.makeMove(index)){
-            displayController.updateCell(index, player);
+            displayController.updateCell(index, currentPlayerKey);
             const result = checkWinner();
 
             if(result){
@@ -96,6 +119,10 @@ const displayController = (function(){
     const scoreX = document.getElementById("score-x");
     const scoreO = document.getElementById("score-o");
     const scoreTies = document.getElementById("score-ties");
+    const scoreLabelX = document.getElementById("score-label-x");
+    const scoreLabelO = document.getElementById("score-label-o");
+    const scoreSymbolX = document.getElementById("score-symbol-x");
+    const scoreSymbol0 = document.getElementById("score-symbol-o");
 
     let scores = {X:0, O:0, ties:0};
 
@@ -124,21 +151,23 @@ const displayController = (function(){
                 gameContainer.appendChild(createCell(i));
             }
         },
-        updateCell(index, player){
+        updateCell(index, playerKey){
+            const player = playerSettings.getPlayer(playerKey);
             const cell = gameContainer.children[index];
-            cell.textContent = player;
-            cell.classList.add(`player-${player.toLowerCase()}`);
+            cell.textContent = player.symbol;
+            cell.classList.add(`player-${playerKey.toLowerCase()}`);
         },
         updateScores(){
             scoreX.textContent = scores.X;
             scoreO.textContent = scores.O;
             scoreTies.textContent = scores.ties;
         },
-        showWinner(winner, winningPattern){
-            updateStatus(`player ${winner} wins!`);
+        showWinner(winnerKey, winningPattern){
+            const winner = playerSettings.getPlayer(winnerKey);
+            updateStatus(`player ${winner.name} wins!`);
             statusDisplay.classList.add("winner-animation");
             animateWinningCells(winningPattern);
-            scores[winner]++;
+            scores[winnerKey]++;
             this.updateScores();
             setTimeout(() => {statusDisplay.classList.remove("winner-animation");}, 800);
         },
@@ -147,17 +176,38 @@ const displayController = (function(){
             scores.ties++;
             this.updateScores;
         },
-        showCurrentPlayer(player){
-            updateStatus(`Player ${player}'s turn`);
+        showCurrentPlayer(playerKey){
+            const player = playerSettings.getPlayer(playerKey);
+            updateStatus(`Player ${player.name}'s turn`);
+
+            document.querySelectorAll(".player-config").forEach(config=>{
+                config.classList.remove("active");
+            })
+            document.getElementById(`player-${playerKey.toLowerCase()}-config`).classList.add("active");
         },
         reset(){
             Array.from(gameContainer.children).forEach(cell=>{
                 cell.textContent = "";
                 cell.className = "cell";
             });
-            updateStatus("Player X\'s turn");
+            const playerX = playerSettings.getPlayer("X")
+            updateStatus(`${PlayerX.name}'s turn`);
             statusDisplay.classList.remove("winner-animation");
+
+            document.querySelectorAll('.player-config').forEach(config => {
+                config.classList.remove('active');
+            });
+            document.getElementById('player-x-config').classList.add('active');
         },
+        updatePlayerLabels() {
+            const playerX = playerSettings.getPlayer('X');
+            const playerO = playerSettings.getPlayer('O');
+            
+            scoreLabelX.textContent = playerX.name;
+            scoreLabelO.textContent = playerO.name;
+            scoreSymbolX.textContent = playerX.symbol;
+            scoreSymbolO.textContent = playerO.symbol;
+        },        
         resetScores(){
             scores = {X:0, O:0, ties:0};
             this.updateScores();
@@ -165,7 +215,83 @@ const displayController = (function(){
     }
 })();
 
+const settingsController = (function(){
+    const playerXName = document.getElementById("player-x-name");
+    const playerXSymbol = document.getElementById("player-x-symbol");
+    const playerXSymbolDisplay = document.getElementById("player-x-symbol-display");
+    const playerOName = document.getElementById("player-o-name");
+    const playerOSymbol = document.getElementById("player-o-symbol");
+    const playerOSymbolDisplay = document.getElementById("player-o-symbol-display");
+    const applyButton = document.getElementById("apply-settings");
+
+    function updateSymbolDisplay(input, display){
+        const symbol = input.value.trim() || input.placeholder;
+        display.textContent = symbol.charAt(0);
+    }
+
+    function validateSymbol(input, otherInput){
+        let value = input.value.trim();
+        if(!value){
+            value = input.placeholder;
+        }
+        if(value === otherInput.value.trim() || value === otherInput.placeholder){
+            input.style.borderColor = "#e74c3c";
+            return false;
+        }else{
+            input.style.borderColor = "#e0e0e0";
+            return true;
+        }
+    }
+
+    return {
+        initialize(){
+            playerXSymbol.addEventListener("input", ()=>{
+                updateSymbolDisplay(playerXSymbol, playerXSymbolDisplay);
+                validateSymbol(playerXSymbol, playerOSymbol);
+            });
+            playerOSymbol.addEventListener("input", ()=>{
+                updateSymbolDisplay(playerOSymbol, playerOSymbolDisplay);
+                validateSymbol(playerOSymbol, playerXSymbol);
+            });
+            applyButton.addEventListener("click", ()=>{
+                const xSymbolValid = validateSymbol(playerXSymbol, playerOSymbol);
+                const oSymbolValid = validateSymbol(playerOSymbol, playerXSymbol);
+
+                if(xSymbolValid && oSymbolValid){
+                    playerSettings.updatePlayer("X",
+                        playerXName.value,
+                        playerXSymbol.value || playerXSymbol.placeholder
+                    );
+                    playerSettings.updatePlayer("O",
+                        playerOName.value,
+                        playerOSymbol.value || playerOSymbol.placeholder
+                    );
+                    displayController.updatePlayerLabels();
+                    gameController.newGame();
+
+                    applyButton.textContent = "Applied! ✓";
+                    applyButton.style.background = "linear-gradient(135deg, #27ae60, #2ecc71)";
+                    setTimeout(()=>{
+                        applyButton.textContent = "Apply Settings";
+                        applyButton.style.background = "linear-gradient(135deg, #667eea, #764ba2)"
+                    },1500);
+                }
+            });
+
+            [playerXName, playerXSymbol, playerOName, playerOSymbol].forEach(input=>{
+                input.addEventListener("keypress", (e)=>{
+                    if(e.key === "Enter"){
+                        applyButton.click();
+                    }
+                });
+            });
+        }
+    };
+});
+
 document.addEventListener("DOMContentLoaded", ()=>{
+    settingsController.initialize();
+    displayController.updatePlayerLabels();
     gameController.startGame();
     document.getElementById("new-game").addEventListener("click", ()=>{gameController.newGame();});
     document.getElementById("reset-scores").addEventListener("click", ()=>{displayController.resetScores();});
