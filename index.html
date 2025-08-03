@@ -4,8 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>tic-tac-toe</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div class="game-container">
+        <h1>Tic-Tac-Toe</h1>
+        <p class="subtitle">Is this madness? Probably!</p>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Player X</div>
+                <div class="score-value" id="score-x">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Ties</div>
+                <div class="score-value" id="score-ties">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Player O</div>
+                <div class="score-value" id="score-o">0</div>
+            </div>
+        </div>
+
+        <div class="status" id="status">Player X's turn</div>
+
+        <div class="gameboard" id="gameboard"></div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="new-game">New Game</buttons>
+            <button class="btn btn-secondary" id="reset-scores">Reset Scores</buttons>
+        </div>
+
+    </div>
+    <script src="game.js"></script>
 </body>
 </html>

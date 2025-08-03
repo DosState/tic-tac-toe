@@ -63,3 +63,78 @@ const gameController = (function(){
     }
     return {checkWinner, makeControlledMove};
 })();
+
+const displayController = (function(){
+    const gameContainer = document.getElementById("gameboard");
+    const statusDisplay = document.getElementById("status");
+    const scoreX = document.getElementById("score-x");
+    const scoreO = document.getElementsById("score-o");
+    const scoreTies = document.getElementById("score-ties");
+
+    let scores = {X:0, O:0, ties:0};
+
+    function createCell(){
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = index;
+        return cell;
+    }
+
+    function updateStatus(message){
+        statusDisplay.textContent = message;
+    }
+
+    function animateWinningCells(pattern){
+        pattern.forEach(index => {
+                const cell = gameContainer.children[index];
+                cell.classList.add("winning-cell");
+        });
+    }
+
+    return{
+        initializeDisplay() {
+            gameContainer.innerHTML = "";
+            for (let i=0; i<9; i++){
+                gameContainer.appendChild(createCell(i));
+            }
+        },
+        updateCell(index, player){
+            const cell = gameContainer.children[index];
+            cell.textContent = player;
+            cell.classList.add(`player-${player.toLowerCase()}`);
+        },
+        updateScores(){
+            scoreX.textContent = scores.X;
+            scoreO.textContent = scores.O;
+            scoreTies.textContent = scores.ties;
+        },
+        showWinner(winner, winningPattern){
+            updateStatus(`player ${winner} wins!`);
+            statusDisplay.classList.add("winner-animation");
+            animateWinningCells(winningPattern);
+            scores[winner]++;
+            this.updateScores();
+            setTimeout(() => {statusDisplay.classList.remove("winner-animation");}, 800);
+        },
+        showTie(){
+            updateStatus("It's a tie!");
+            scores.ties++;
+            this.updateScores;
+        },
+        showCurrentPlayer(player){
+            updateStatus(`Player ${player}'s turn`);
+        },
+        reset(){
+            Array.from(gameContainer.children).forEach(cell=>{
+                cell.textContent = "";
+                cell.className = "cell";
+            });
+            updateStatus("Player X\'s turn");
+            statusDisplay.classList.remove("winner-animation");
+        },
+        resetScores(){
+            scores = {X:0, O:0, ties:0};
+            this.updateScores();
+        }
+    }
+})();
