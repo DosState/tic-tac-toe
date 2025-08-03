@@ -28,7 +28,7 @@
 
             <div class="player-config" id="player-o-config">
                 <div class="player-header">
-                    <div class="player-symbol-display" id="player-o-sybol-display">O</div>
+                    <div class="player-symbol-display" id="player-o-symbol-display">O</div>
                     <span>Player 2</span>
                 </div>
                 <div class="input-group">
@@ -48,7 +48,10 @@
 
             <div class="score-board">
                 <div class="score-item">
-                    <div class="score-label">Player X</div>
+                    <div class="score-label">
+                        <span id="score-label-x">Player X</span>
+                        <span class="score-player-symbol" id="score-symbol-x">X</span>
+                    </div>
                     <div class="score-value" id="score-x">0</div>
                 </div>
                 <div class="score-item">
@@ -56,7 +59,10 @@
                     <div class="score-value" id="score-ties">0</div>
                 </div>
                 <div class="score-item">
-                    <div class="score-label">Player O</div>
+                    <div class="score-label">
+                        <span id="score-label-o">Player O</span>
+                        <span class="score-player-symbol" id="score-symbol-o">O</span>
+                    </div>
                     <div class="score-value" id="score-o">0</div>
                 </div>
             </div>

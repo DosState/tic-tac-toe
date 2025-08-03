@@ -122,7 +122,7 @@ const displayController = (function(){
     const scoreLabelX = document.getElementById("score-label-x");
     const scoreLabelO = document.getElementById("score-label-o");
     const scoreSymbolX = document.getElementById("score-symbol-x");
-    const scoreSymbol0 = document.getElementById("score-symbol-o");
+    const scoreSymbolO = document.getElementById("score-symbol-o");
 
     let scores = {X:0, O:0, ties:0};
 
@@ -191,7 +191,7 @@ const displayController = (function(){
                 cell.className = "cell";
             });
             const playerX = playerSettings.getPlayer("X")
-            updateStatus(`${PlayerX.name}'s turn`);
+            updateStatus(`${playerX.name}'s turn`);
             statusDisplay.classList.remove("winner-animation");
 
             document.querySelectorAll('.player-config').forEach(config => {
@@ -287,7 +287,7 @@ const settingsController = (function(){
             });
         }
     };
-});
+})();
 
 document.addEventListener("DOMContentLoaded", ()=>{
     settingsController.initialize();
