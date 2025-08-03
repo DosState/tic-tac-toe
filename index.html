@@ -7,34 +7,69 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>Tic-Tac-Toe</h1>
-        <p class="subtitle">Is this madness? Probably!</p>
+    <div class="main-container">
+        <div class="settings-panel">
+            <h2 class="settings-title">Player Settings</h2>
 
-        <div class="score-board">
-            <div class="score-item">
-                <div class="score-label">Player X</div>
-                <div class="score-value" id="score-x">0</div>
+            <div class="player-config" id="player-x-config">
+                <div class="player-header">
+                    <div class="player-symbol-display" id="player-x-sybol-display">X</div>
+                    <span>Player 1</span>
+                </div>
+                <div class="input-group">
+                    <label for="player-x-name" class="input-label">Player Name</label>
+                    <input type="text" id="player-x-name" class="input-field symbol-input" value="X" maxlength="20">
+                </div>
+                <div class="input-group">
+                    <label for="player-x-symbol" class="input-label">Symbol</label>
+                    <input type="text" id="player-x-symbol" class="input-field symbol-input" value="X" maxlength="2" placeholder="X">
+                </div>
             </div>
-            <div class="score-item">
-                <div class="score-label">Ties</div>
-                <div class="score-value" id="score-ties">0</div>
+
+            <div class="player-config" id="player-o-config">
+                <div class="player-header">
+                    <div class="player-symbol-display" id="player-o-sybol-display">O</div>
+                    <span>Player 2</span>
+                </div>
+                <div class="input-group">
+                    <label for="player-o-name" class="input-label">Player Name</label>
+                    <input type="text" id="player-o-name" class="input-field symbol-input" value="O" maxlength="20">
+                </div>
+                <div class="input-group">
+                    <label for="player-o-symbol" class="input-label">Symbol</label>
+                    <input type="text" id="player-o-symbol" class="input-field symbol-input" value="O" maxlength="2" placeholder="X">
+                </div>
             </div>
-            <div class="score-item">
-                <div class="score-label">Player O</div>
-                <div class="score-value" id="score-o">0</div>
+            <button class="apply-settings" id="apply-settings">Apply Settings</button>
+        </div>
+        <div class="game-container">
+            <h1>Tic-Tac-Toe</h1>
+            <p class="subtitle">Is this madness? Probably!</p>
+
+            <div class="score-board">
+                <div class="score-item">
+                    <div class="score-label">Player X</div>
+                    <div class="score-value" id="score-x">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Ties</div>
+                    <div class="score-value" id="score-ties">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Player O</div>
+                    <div class="score-value" id="score-o">0</div>
+                </div>
+            </div>
+
+            <div class="status" id="status">Player X's turn</div>
+
+            <div class="gameboard" id="gameboard"></div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="new-game">New Game</buttons>
+                <button class="btn btn-secondary" id="reset-scores">Reset Scores</buttons>
             </div>
         </div>
-
-        <div class="status" id="status">Player X's turn</div>
-
-        <div class="gameboard" id="gameboard"></div>
-
-        <div class="controls">
-            <button class="btn btn-primary" id="new-game">New Game</buttons>
-            <button class="btn btn-secondary" id="reset-scores">Reset Scores</buttons>
-        </div>
-
     </div>
     <script src="game.js"></script>
 </body>
