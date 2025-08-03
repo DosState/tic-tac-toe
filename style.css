@@ -12,6 +12,15 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
+    gap: 20px;
+}
+
+.main-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .game-container{
@@ -22,6 +31,112 @@ body {
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     text-align: center;
     min-width: 400px;
+}
+
+.settings-panel{
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    min-width: 300px;
+    max-width: 320px;
+}
+
+.settings-title{
+    color:#333;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.player-config {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.player-config.active {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.player-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.player-symbol-display {
+    width: 30px;
+    height: 30px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.symbol-input {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.apply-settings {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.apply-settings:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
 h1{
@@ -204,10 +319,16 @@ h1{
  }
 
  @media (max-width:480px){
-    .game-container{
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .game-container, .settings-panel {
         padding: 20px;
         min-width: auto;
         width: 100%;
+        max-width: 400px;
     }
     .cell{
         width: 70px;
@@ -225,3 +346,14 @@ h1{
         align-items: center;
     }
  }
+
+ @media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .settings-panel {
+        max-width: 400px;
+    }
+}
