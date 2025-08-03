@@ -69,6 +69,7 @@ const gameController = (function(){
             }
         }
     }
+
     return {
         startGame() {
             gameBoard.reset();
@@ -93,12 +94,12 @@ const displayController = (function(){
     const gameContainer = document.getElementById("gameboard");
     const statusDisplay = document.getElementById("status");
     const scoreX = document.getElementById("score-x");
-    const scoreO = document.getElementsById("score-o");
+    const scoreO = document.getElementById("score-o");
     const scoreTies = document.getElementById("score-ties");
 
     let scores = {X:0, O:0, ties:0};
 
-    function createCell(){
+    function createCell(index){
         const cell = document.createElement("div");
         cell.classList.add("cell");
         cell.dataset.index = index;
@@ -168,4 +169,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
     gameController.startGame();
     document.getElementById("new-game").addEventListener("click", ()=>{gameController.newGame();});
     document.getElementById("reset-scores").addEventListener("click", ()=>{displayController.resetScores();});
-})
+});
